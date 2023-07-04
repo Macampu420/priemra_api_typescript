@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "ts-standard",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev src/index"
+    "dev": "ts-node-dev src/index",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
@@ -14,12 +14,24 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/pg": "^8.10.2",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "eslint": "^8.44.0",
+    "eslint-config-standard": "^17.1.0",
+    "ts-node-dev": "^2.0.0",
     "ts-standard": "^12.0.2",
     "typescript": "^5.1.6"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "pg": "^8.11.1",
-    "ts-node-dev": "^2.0.0"
+    "pg": "^8.11.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends":  ["standard"]
   }
 }
