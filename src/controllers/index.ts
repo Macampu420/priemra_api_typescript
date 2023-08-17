@@ -6,6 +6,11 @@ import { QueryResult } from 'pg'
 import { Usuario } from '../types'
 
 export default class Usuarios {
+  convertirCamelCase = (palabra: string):string => {
+    const palabraCamelCase = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase()
+    return palabraCamelCase
+  }
+
   private manejoErrorConsulta (res:Response, error?:unknown):Response {
     console.log(error)
     // devuelve un codigo http 500 y un json con el mensaje de que ocurrió un error
