@@ -20,6 +20,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.44.0",
     "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-jest": "^27.2.3",
     "jest": "^29.6.2",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
@@ -35,10 +36,12 @@
     "root": true,
     "parser": "@typescript-eslint/parser",
     "plugins": [
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "jest"
     ],
     "extends": [
-      "standard"
+      "standard",
+      "plugin:jest/recommended"
     ]
   }
 }

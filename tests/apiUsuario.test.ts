@@ -4,6 +4,6 @@ const objUsuarios = new Usuarios()
 
 describe('API usuarios', () => {
   test('palabra formatea', () => {
-    expect(objUsuarios.convertirCamelCase('juan')).toMatch(/Juan/)
+    expect(objUsuarios.convertirCamelCase('juan')).toBe('Juan')
   })
 })
