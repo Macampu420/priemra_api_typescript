@@ -1,16 +1,5 @@
-import express from 'express'
+import app from './app'
 
-// routes importing
-import router from './routes/index'
-
-const port = 3000
-const app = express()
-
-// middlewares
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-
-// routes settings
-app.use('/api', router)
+const port = process.env.PORV || 3000
 
 app.listen(port, () => console.log(`app running on port ${port}`))

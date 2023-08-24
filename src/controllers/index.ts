@@ -7,7 +7,8 @@ import { Usuario } from '../types'
 
 export default class Usuarios {
   convertirCamelCase = (palabra: string):string => {
-    const palabraCamelCase = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase()
+    // Convertir a camelCase
+    const palabraCamelCase: string = palabra[0].toUpperCase() + palabra.slice(1).toLowerCase()
     return palabraCamelCase
   }
 
@@ -17,16 +18,17 @@ export default class Usuarios {
     return res.status(500).json({ mensaje: 'Ocurrió un error, por favor intentalo de nuevo.' })
   }
 
+  // Busca el usuario por su id
   private async buscarUsuario (req: Request): Promise<Usuario[] | undefined | null> {
-    const { idUsuario } = req.params // Obtiene el parámetro 'idUsuario' del objeto 'req'
-
+    // Obtiene el id del usuario de los parametros de la peticion
+    const { idUsuario } = req.params
+    // Intenta realizar la consulta
     try {
-      // Realiza una consulta a la base de datos para buscar el usuario con el id especificado
-      const resultadoUsuario: QueryResult = await pool.query('SELECT * FROM usuarios WHERE idUsuario = $1', [idUsuario])
-
-      if (!resultadoUsuario.rowCount) return null // Si no se encontró ningún registro, devuelve null
-
-      // Mapea los registros obtenidos en el resultado de la consulta a objetos 'Usuario'
+      // Realiza la consulta
+      const resultadoUsuario: QueryResult = await pool.query('SELECT * FROM usuarios WHERE idUsuario = ?', [idUsuario])
+      // Si no hay resultados retornara null
+      if (!resultadoUsuario.rowCount) return null
+      // Mapea los resultados de la consulta a un arreglo de objetos
       const usuario: Usuario[] = resultadoUsuario.rows.map(registro => {
         const usuario: Usuario = {
           idUsuario: registro.idUsuario,
@@ -35,26 +37,33 @@ export default class Usuarios {
         }
         return usuario
       })
-
-      return usuario // Devuelve el array de objetos 'Usuario'
+      // Retorna el resultado de la consulta
+      return usuario
     } catch (error) {
-      console.log(error) // Imprime el error en la consola
-      throw new Error('Error consultando el usuario') // Lanza una excepción con un mensaje de error
+      // Si hay un error en la consulta, lanza un error
+      throw new Error('Error consultando el usuario')
     }
   }
 
+  // POST /usuarios
+  // Crear un nuevo usuario
   public async crearUsuario (req: Request, res: Response): Promise<Response> {
-    // Obtener el usuario del cuerpo de la solicitud
+  // Obtener el usuario del cuerpo de la solicitud
     const { usuario }: { usuario: Usuario } = req.body
 
+    if (!usuario.nombresUsuario || !usuario.correoUsuario) return res.status(400).json({ mensaje: 'El usuario no tiene los campos necesarios' })
+
     try {
-      // Insertar el nuevo usuario en la base de datos
-      await pool.query('INSERT INTO usuarios (nombres, correo) VALUES ($1, $2)', [usuario.nombresUsuario, usuario.correoUsuario])
+    // Insertar el nuevo usuario en la base de datos
+      await pool.query(
+        'INSERT INTO usuarios (nombres, correo) VALUES ($1, $2)',
+        [usuario.nombresUsuario, usuario.correoUsuario]
+      )
 
       // Devolver una respuesta con estado 201 (creado) y finalizar la respuesta
       return res.status(201).end()
     } catch (error) {
-      // Manejar cualquier error de consulta y devolver un mensaje de error
+    // Manejar cualquier error de consulta y devolver un mensaje de error
       return this.manejoErrorConsulta(res, error)
     }
   }
